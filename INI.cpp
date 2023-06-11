@@ -1,8 +1,8 @@
-#include"INI.h"
+п»ї#include"INI.h"
 
 
 
-    INI::INI(std::string s) :file(std::ifstream(s + ".txt")) //// работа со строкой из файла
+    INI::INI(std::string s) :file(std::ifstream(s + ".txt")) //// СЂР°Р±РѕС‚Р° СЃРѕ СЃС‚СЂРѕРєРѕР№ РёР· С„Р°Р№Р»Р°
     {
 
         if (file.is_open())
@@ -14,11 +14,11 @@
 
                 if (s.size() < 3)
                 {
-                    std::cerr << "Empty rows! Previous Line:" << str.back()<<"\n"; // не записываем строку в массив
+                    std::cerr << "Empty rows! Previous Line:" << str.back()<<"\n"; // РЅРµ Р·Р°РїРёСЃС‹РІР°РµРј СЃС‚СЂРѕРєСѓ РІ РјР°СЃСЃРёРІ
                 }
                 else if (s.find(';') != std::string::npos)
                 {
-                    auto it = s.find(';'); /// удаляем комментарии
+                    auto it = s.find(';'); /// СѓРґР°Р»СЏРµРј РєРѕРјРјРµРЅС‚Р°СЂРёРё
                     if (it > 0)
                     {
                         s.erase(s.begin() + it, s.end()); str.push_back(std::move(s));
@@ -81,7 +81,7 @@
            }
         
         
-        else if (str.find_first_of("1234567890.,") != std::string::npos) //ЭТО Дабл
+        else if (str.find_first_of("1234567890.,") != std::string::npos) //Р­РўРћ Р”Р°Р±Р»
         {
             if (str.find('.') != std::string::npos)
             {
@@ -99,7 +99,7 @@
                 }
         }
 
-        else if (str.find_first_of("1234567890") != std::string::npos) //ЭТО инт
+        else if (str.find_first_of("1234567890") != std::string::npos) //Р­РўРћ РёРЅС‚
         {
             if(type == "long")
             {
@@ -175,19 +175,19 @@
             if (l[i].find('[') != std::string::npos && l[i + 1].find('[') == std::string::npos && i < size)
             {
                 section = extr_section(i);
-                i++;/////нашли секцию
+                i++;/////РЅР°С€Р»Рё СЃРµРєС†РёСЋ
 
                 for (; i < size && l[i].find('[') == std::string::npos; )
                 {
                     if (l[i].find('=') != std::string::npos)
                     {
-                        pair = extr_valve(i); /// эту пару засунуть в мап0 
+                        pair = extr_valve(i); /// СЌС‚Сѓ РїР°СЂСѓ Р·Р°СЃСѓРЅСѓС‚СЊ РІ РјР°Рї0 
                         m[section][pair.first] = pair.second;// insert(pair.first, pair.second);
                         i++;
                     }
                 }
             }
-            else { std::cerr << "Section empty! Section:" << l[i]<< "\n";  i++; } //если есть пустая секция
+            else { std::cerr << "Section empty! Section:" << l[i]<< "\n";  i++; } //РµСЃР»Рё РµСЃС‚СЊ РїСѓСЃС‚Р°СЏ СЃРµРєС†РёСЏ
         }
 
     };

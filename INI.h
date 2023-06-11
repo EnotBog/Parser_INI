@@ -1,4 +1,4 @@
-#pragma once
+п»ї#pragma once
 #include <any>
 #include <map>
 #include <vector>
@@ -33,11 +33,11 @@ public:
         }
     }
 
-    INI(std::string s); //// работа со строкой из файла
+    INI(std::string s); //// СЂР°Р±РѕС‚Р° СЃРѕ СЃС‚СЂРѕРєРѕР№ РёР· С„Р°Р№Р»Р°
 
 private:
     std::map<std::string, std::map<std::string, std::string>> m;
-    std::vector<std::string> str; // сюда засовываем файл по строчно; 
+    std::vector<std::string> str; // СЃСЋРґР° Р·Р°СЃРѕРІС‹РІР°РµРј С„Р°Р№Р» РїРѕ СЃС‚СЂРѕС‡РЅРѕ; 
     std::ifstream file;
 
 
