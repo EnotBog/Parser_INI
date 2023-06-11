@@ -4,6 +4,7 @@
 
     INI::INI(std::string s) :file(std::ifstream(s + ".txt")) //// работа со строкой из файла
     {
+
         if (file.is_open())
         {
             while (!file.eof())
@@ -13,7 +14,7 @@
 
                 if (s.size() < 3)
                 {
-                    // не записываем строку в массив
+                    std::cerr << "Empty rows! Previous Line:" << str.back()<<"\n"; // не записываем строку в массив
                 }
                 else if (s.find(';') != std::string::npos)
                 {
@@ -22,7 +23,6 @@
                     {
                         s.erase(s.begin() + it, s.end()); str.push_back(std::move(s));
                     }
-                    else {}
                 }
                 else
                 {
@@ -32,8 +32,6 @@
             file.close();
 
             edit_file(str);
-
-
         }
         else
         {
@@ -71,33 +69,51 @@
     }
 
 
-    std::any INI::is_type(const std::string& str) const
+    std::any INI::is_type( std::string& str, const char* _type) const
     {
         std::any a;
-
-        if (str.find_first_of("qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM") != std::string::npos) //ЭТО СТРОКА 
+        std::string type = _type;
+      
+        
+        if (type == "class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> >")
+           {
+               return  a.emplace<std::string>(str);
+           }
+        
+        
+        else if (str.find_first_of("1234567890.,") != std::string::npos) //ЭТО Дабл
         {
+            if (str.find('.') != std::string::npos)
             {
-                std::string str1 = str;
-                return  a.emplace<std::string>(str1);
+                str[str.find('.')] = ',';
             }
+
+                if (type == "double") {
+                        double d = stod(str);
+                        return a.emplace<double>(d);
+                    }
+                if (type == "float")
+                {
+                    float d = std::stof(str);
+                    return a.emplace<float>(d);
+                }
         }
-        if (str.find_first_of("1234567890") != std::string::npos) //ЭТО инт
+
+        else if (str.find_first_of("1234567890") != std::string::npos) //ЭТО инт
         {
+            if(type == "long")
+            {
+                long i = stol(str);
+                return  a.emplace<long>(i);
+            }
+            if (type == "int")
             {
                 int i = stoi(str);
                 return  a.emplace<int>(i);
             }
         }
 
-        if (str.find_first_of("1234567890.,") != std::string::npos) //ЭТО Дабл
-        {
-            {
-                double d = stod(str);
-                return a.emplace<double>(d);
-            }
-        }
-
+       return a;
     }
 
 
@@ -158,20 +174,20 @@
             std::pair<std::string, std::string> pair;
             if (l[i].find('[') != std::string::npos && l[i + 1].find('[') == std::string::npos && i < size)
             {
-                section = std::move(extr_section(i));
+                section = extr_section(i);
                 i++;/////нашли секцию
 
                 for (; i < size && l[i].find('[') == std::string::npos; )
                 {
                     if (l[i].find('=') != std::string::npos)
                     {
-                        pair = std::move(extr_valve(i)); /// эту пару засунуть в мап0 
+                        pair = extr_valve(i); /// эту пару засунуть в мап0 
                         m[section][pair.first] = pair.second;// insert(pair.first, pair.second);
                         i++;
                     }
                 }
             }
-            else { i++; } //если есть пустая секция
+            else { std::cerr << "Section empty! Section:" << l[i]<< "\n";  i++; } //если есть пустая секция
         }
 
     };
