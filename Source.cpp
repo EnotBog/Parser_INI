@@ -11,9 +11,12 @@ int main()
     {
     INI parser("INI");
 
-    auto value = parser.get_value<std::string>("Section2.var1");
+  //  auto value = parser.get_value<int>("Section2.var1");
 
-    std::cout << value << "\n";
+    std::cout << parser.get_value<std::string>("Section1.var1") << "\n";
+    std::cout << parser.get_value<int>("Section1.var1") << "\n";
+    std::cout << parser.get_value<double>("Section1.var1") << "\n";
+
       
     return (0);
     }

@@ -68,6 +68,64 @@
         return std::make_pair(section, value);
     }
 
+    std::variant<int, float, long, double, std::string> INI::is_type_var(std::string& str, const char* _type) const
+    {
+        std::variant<int, float, long, double, std::string> a;
+        std::string type = _type;
+
+        if (type == "class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> >")
+        {
+            return  a = str;
+        }
+
+
+        else if (str.find_first_of("1234567890.,") != std::string::npos) //ЭТО Дабл
+        {
+            if (str.find('.') != std::string::npos)
+            {
+                str[str.find('.')] = ',';
+            }
+
+            if (type == "double") {
+                double d = stod(str);
+                return a = d;
+            }
+            else if (type == "float")
+            {
+                float d = std::stof(str);
+                return a = d;
+            }
+            else
+            {
+                std::cerr << "Create alternative: " + str << "\n";
+                float d = std::stof(str);
+                return a = d;
+            }
+
+        }
+
+        else if (str.find_first_of("1234567890") != std::string::npos) //ЭТО инт
+        {
+            if (type == "long")
+            {
+                long i = stol(str);
+                return a = i;
+            }
+            else if (type == "int")
+            {
+                int i = stoi(str);
+                return a = i;
+            }
+            else
+            {
+                std::cerr << "Create alternative\n" + str;
+                int i = stoi(str);
+                return a = i;
+            }
+        }
+
+        return a;
+    }
 
     std::any INI::is_type( std::string& str, const char* _type) const
     {
@@ -92,11 +150,12 @@
                         double d = stod(str);
                         return a.emplace<double>(d);
                     }
-                if (type == "float")
+                else if (type == "float")
                 {
                     float d = std::stof(str);
                     return a.emplace<float>(d);
                 }
+
         }
 
         else if (str.find_first_of("1234567890") != std::string::npos) //ЭТО инт
@@ -111,6 +170,11 @@
                 int i = stoi(str);
                 return  a.emplace<int>(i);
             }
+        }
+        else
+        {
+            double d = stod(str);
+            return a.emplace<double>(d);
         }
 
        return a;
